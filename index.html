@@ -9,7 +9,7 @@
     <meta property="og:description" content="Professional crypto wallet app inspired by Trust Wallet with real-time balances, time-locked transactions, notifications, and owner administration." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#0b111e" />
+    <meta name="theme-color" content="#070b13" />
     <link rel="manifest" href="./manifest.json" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -19,8 +19,53 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   </head>
   <body class="bg-[#070b13] text-slate-100 antialiased selection:bg-emerald-500/20 selection:text-emerald-400">
-    <div id="root"></div>
+    <div id="root">
+      <div id="app-splash" style="position:fixed;inset:0;background:#070b13;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;color:#f8fafc;z-index:99999;">
+        <div style="position:relative;margin-bottom:24px;">
+          <div style="width:76px;height:76px;border-radius:24px;background:linear-gradient(135deg,#0500FF,#0052FF);display:flex;align-items:center;justify-content:center;box-shadow:0 0 35px rgba(0,82,255,0.45);">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+        </div>
+        <div style="font-size:20px;font-weight:700;letter-spacing:1px;margin-bottom:8px;">TRUST WALLET PRO</div>
+        <div id="app-loading-text" style="font-size:13px;color:#94a3b8;">جاري تحميل المحفظة...</div>
+        <div id="app-diagnostic" style="display:none;margin-top:20px;padding:12px 18px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:14px;max-width:85%;font-size:12px;color:#fca5a5;text-align:center;">
+          <div id="app-diagnostic-msg"></div>
+          <button onclick="location.reload()" style="margin-top:10px;padding:6px 14px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">إعادة المحاولة</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function() {
+        window.addEventListener('error', function(e) {
+          console.error('[Diagnostic] Window Error:', e.message, e.filename, e.lineno);
+          var diag = document.getElementById('app-diagnostic');
+          var msg = document.getElementById('app-diagnostic-msg');
+          var text = document.getElementById('app-loading-text');
+          if (diag && msg) {
+            diag.style.display = 'block';
+            if (text) text.innerText = 'تعذر تشغيل الواجهة';
+            msg.innerText = e.message || 'حدث خطأ أثناء تحميل موارد التطبيق';
+          }
+        });
+        window.addEventListener('unhandledrejection', function(e) {
+          console.error('[Diagnostic] Unhandled Rejection:', e.reason);
+        });
+        setTimeout(function() {
+          var root = document.getElementById('root');
+          var splash = document.getElementById('app-splash');
+          var diag = document.getElementById('app-diagnostic');
+          var msg = document.getElementById('app-diagnostic-msg');
+          if (splash && root && root.children.length === 1 && root.children[0] === splash) {
+            if (diag && msg && diag.style.display !== 'block') {
+              diag.style.display = 'block';
+              msg.innerText = 'استغرق التحميل وقتاً طويلاً. اضغط أدناه لإعادة المحاولة.';
+            }
+          }
+        }, 5000);
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
