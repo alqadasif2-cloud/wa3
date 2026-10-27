@@ -50,7 +50,7 @@ export const LockedTransactionsView: React.FC<LockedTransactionsViewProps> = ({
     return () => clearInterval(interval);
   }, [lockedTxs, onRefresh]);
 
-  const totalLockedAmount = lockedTxs.reduce((sum, tx) => sum + tx.amount, 0);
+  const totalLockedAmount = lockedTxs.reduce((sum: number, tx: Transaction) => sum + (tx.amount || 0), 0);
 
   return (
     <div className="rounded-3xl bg-slate-900/60 border border-slate-800/80 p-5">

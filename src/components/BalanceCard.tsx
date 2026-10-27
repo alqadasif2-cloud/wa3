@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wallet } from '../types/wallet';
+import { Wallet, CryptoAsset } from '../types/wallet';
 import { formatCurrency, formatCountdown } from '../utils/formatters';
 import { ArrowUpRight, ArrowDownLeft, Clock, Lock, ArrowDownUp, CreditCard, TrendingUp, TrendingDown } from 'lucide-react';
 
@@ -31,7 +31,7 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
   const lockedBalance = wallet?.lockedDemoBalance ?? 0;
 
   // Real-time calculation of portfolio 24h performance based on live asset changes
-  const changeAmount = wallet?.assets?.reduce((sum: number, a) => {
+  const changeAmount = wallet?.assets?.reduce((sum: number, a: CryptoAsset) => {
     return sum + (a.usdValue * (a.change24h / 100));
   }, 0) ?? 0;
   const changePercent = totalBalance > 0 ? (changeAmount / totalBalance) * 100 : 0;

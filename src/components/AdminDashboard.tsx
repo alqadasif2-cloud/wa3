@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Transaction } from '../types/wallet';
+import { User, Wallet, Transaction } from '../types/wallet';
 import { WalletDatabase } from '../services/walletDb';
 import { formatCurrency, shortenAddress, formatDateTime } from '../utils/formatters';
 import { 
@@ -50,8 +50,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const allTxs = WalletDatabase.getTransactions();
   const auditLogs = WalletDatabase.getAuditLogs();
 
-  const totalSystemBalance = wallets.reduce((sum, w) => sum + w.totalDemoBalance, 0);
-  const totalLockedVolume = wallets.reduce((sum, w) => sum + w.lockedDemoBalance, 0);
+  const totalSystemBalance = wallets.reduce((sum: number, w: Wallet) => sum + (w.totalDemoBalance || 0), 0);
+  const totalLockedVolume = wallets.reduce((sum: number, w: Wallet) => sum + (w.lockedDemoBalance || 0), 0);
   const activeLocks = allTxs.filter(t => t.status === 'locked');
 
   const filteredUsers = users.filter(u => 
